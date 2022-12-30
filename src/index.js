@@ -1,7 +1,4 @@
-import burger from './modules/burger';
-import slider from './modules/slider';
+import timer from './modules/timer';
 
 
-
-burger();
-slider();
+timer('1 January 2023');
