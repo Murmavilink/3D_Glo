@@ -5,6 +5,7 @@ import smoothScroll from './modules/smoothScroll';
 import tabs from './modules/tabs';
 import slider from './modules/slider';
 import validate from './modules/validate';
+import calc from './modules/calc';
 
 timer('31 december 2023');
 menu();
@@ -13,3 +14,4 @@ smoothScroll();
 tabs();
 slider('portfolio-content', 'portfolio-item', 'portfolio-dots', 'portfolio-item-active', 'dot-active');
 validate();
+calc(100);
