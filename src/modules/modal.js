@@ -1,36 +1,43 @@
+import { animate } from "./helpers";
+
 const modal = () => {
-    const popupBtns = document.querySelectorAll('.popup-btn');
-    const popup = document.querySelector('.popup');
-    const popupContent = document.querySelector('.popup-content');
+    const modal = document.querySelector('.popup');
+    const buttons = document.querySelectorAll('.popup-btn');
+    const popupContent = modal.querySelector('.popup-content');
 
-    let count = 0;
-    let idRequest;
-
-    const screenCheck = () => {
-        return document.documentElement.clientWidth < 768 ? true : false;
-    };
-
-    const modalAnim = () => {
-        count++;
-
-        idRequest = requestAnimationFrame(modalAnim);
-        popupContent.style.top = count + '%';
-
-        if(count > 30) cancelAnimationFrame(idRequest);
-    };
-
-    popupBtns.forEach(popupBtn => {
-        popupBtn.addEventListener('click', () => {
-            popup.style.display = 'block';
-            !screenCheck() ? idRequest = requestAnimationFrame(modalAnim) : '';
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            if (screen.width > 768) {
+                animate({
+                    duration: 800,
+                    timing(timeFraction) {
+                        return timeFraction;
+                    },
+                    draw(progress) {
+                        popupContent.style.top = progress * 30 + '%';
+                    }
+                });
+            }
         });
     });
 
-    popup.addEventListener('click', (e) => {
-        if(!e.target.closest('.popup-content') || e.target.classList.contains('popup-close')) {
-            count = 0;
-            popupContent.style.top = 10 + '%';
-            popup.style.display = 'none';
+
+    modal.addEventListener('click', (e) => {
+        if (!e.target.closest('.popup-content') || e.target.classList.contains('popup-close')) {
+            animate({
+                duration: 800,
+                timing(timeFraction) {
+                    return timeFraction;
+                },
+                draw(progress) {
+                    popupContent.style.top = (progress * -100) + '%';
+                }
+            });
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
         }
     });
 
