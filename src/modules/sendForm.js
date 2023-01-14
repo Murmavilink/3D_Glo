@@ -1,10 +1,20 @@
 const sendForm = ({ formId, someElem = [] }) => {
     const form = document.getElementById(formId);
-    const statusBlock = document.createElement('div');
-    const loadText = 'Загрузка...';
+    const preloader = document.createElement('div');
+    const statusBlock = document.createElement('h3');
     const errorText = 'Ошибка...';
     const succesText = 'Спасибо! Наш менеджер с вами свяжется';
 
+
+    preloader.insertAdjacentHTML("beforeend", `
+        <div id="preloader">
+            <div id="loader"></div>
+        </div>
+    `);
+    
+    preloader.style.display = "none";
+
+    const clearStatusBlock = () => statusBlock.textContent = '';
 
     const sendData = (data) => {
         return fetch('https://jsonplaceholder.typicode.com/posts', {
@@ -21,8 +31,8 @@ const sendForm = ({ formId, someElem = [] }) => {
         const formData = new FormData(form);
         const formBody = {};
 
-        statusBlock.textContent = loadText;
-        form.append(statusBlock);
+        clearStatusBlock();
+        preloader.style.display = "block";
 
         formData.forEach((val, key) => {
             formBody[key] = val;
@@ -39,22 +49,32 @@ const sendForm = ({ formId, someElem = [] }) => {
         });
 
         sendData(formBody).then(data => {
-            console.log(data);
+            preloader.style.display = "none";
             statusBlock.textContent = succesText;
 
             formElements.forEach(input => {
                 input.value = '';
             });
 
+            setTimeout(clearStatusBlock, 5000);
+
         }).catch(error => {
             statusBlock.textContent = errorText;
+            setTimeout(clearStatusBlock, 5000);
         });
+
+        setTimeout(() => {
+            statusBlock.textContent = '';
+        }, 5000);
     };
 
     try {
         if(!form) {
             throw new Error('Верните форму на место, пожааааалуйста))');
         }
+
+        form.append(preloader);
+        form.append(statusBlock);
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
