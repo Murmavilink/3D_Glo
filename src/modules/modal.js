@@ -7,18 +7,17 @@ const modal = () => {
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            modal.style.display = 'block';
-            if (screen.width > 768) {
-                animate({
-                    duration: 800,
-                    timing(timeFraction) {
-                        return timeFraction;
-                    },
-                    draw(progress) {
-                        popupContent.style.top = progress * 30 + '%';
-                    }
-                });
-            }
+            modal.style.display = 'flex';
+            popupContent.style = 'transform: translateY(-50%);';
+            animate({
+                duration: 800,
+                timing(timeFraction) {
+                    return timeFraction;
+                },
+                draw(progress) {
+                    popupContent.style.top = progress * 50 + '%';
+                }
+            });
         });
     });
 
